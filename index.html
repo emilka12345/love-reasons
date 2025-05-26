@@ -3,91 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>365 Reasons Why I Love You 💌</title>
+  <title>Reasons Why I Love You</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f9d5e5, #fcefee);
-      color: #333;
-      margin: 0;
-      padding: 2em;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background: #090e1a;
+      color: #d6336c;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
+      padding: 2em;
+      user-select: none;
     }
     h1 {
-      color: #d6336c;
-      font-size: 2.8em;
-      margin-bottom: 0.3em;
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
     }
     .reason {
-      background: #fff0f6;
-      border: 2px solid #d6336c;
-      border-radius: 15px;
-      max-width: 600px;
-      padding: 2em;
-      font-size: 1.6em;
-      box-shadow: 0 8px 16px rgba(214, 51, 108, 0.3);
-      user-select: none;
-      line-height: 1.4;
-
-      /* Animation styles */
-      opacity: 0;
-      animation: fadeIn 2s forwards;
+      font-size: 1.8em;
+      margin-top: 1em;
+      margin-bottom: 2em;
+      min-height: 5em;
     }
-    footer {
-      margin-top: 3em;
-      font-size: 0.9em;
-      color: #a83253;
-    }
-    @media (max-width: 640px) {
-      .reason {
-        font-size: 1.2em;
-        padding: 1.5em;
-        max-width: 90vw;
-      }
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* Notification popup */
-    #reminder {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+    button#notifyBtn {
+      margin: 1em auto;
+      padding: 0.7em 1.5em;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: none;
       background: #d6336c;
-      color: white;
-      padding: 1em 1.5em;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.6);
-      font-size: 1em;
-      max-width: 300px;
+      color: #fff;
       cursor: pointer;
-      opacity: 0;
-      transform: translateY(100%);
-      transition: opacity 0.5s, transform 0.5s;
+      transition: background 0.3s ease;
+      display: block;
       user-select: none;
-      z-index: 1000;
     }
-    #reminder.show {
-      opacity: 1;
-      transform: translateY(0);
+    button#notifyBtn:hover {
+      background: #b52a5a;
     }
   </style>
 </head>
 <body>
-  <h1>365 Reasons Why I Love You 💌</h1>
-  <div class="reason" id="reason">Loading...</div>
-  <footer>Made with ❤️ just for you</footer>
+  <h1>Reasons Why I Love You ❤️</h1>
+  <div class="reason"></div>
 
-  <div id="reminder" title="Click to close">❤️ Click here to see today's reason again!</div>
+  <button id="notifyBtn">Notify Me</button>
 
   <script>
     const reasons = [
@@ -446,37 +404,22 @@
   "You inspire me to keep dreaming of our future.",
   "I appreciate your honesty and care every day."
 ];
+message
 
-    // Calculate index based on days since Jan 1, 2025
-    const startDate = new Date("2025-01-01T00:00:00Z");
-    const today = new Date();
+    const reasonDiv = document.querySelector('.reason');
 
-    const diffMs = today - startDate;
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const index = diffDays % reasons.length;
-    const todayReason = reasons[index];
+    // Get today's reason based on date
+    const todayIndex = new Date().getDate() % reasons.length;
+    const todayReason = reasons[todayIndex];
 
-    const reasonEl = document.getElementById("reason");
-    reasonEl.textContent = todayReason;
+    reasonDiv.textContent = todayReason;
 
-    // Notification reminder popup
-    const reminder = document.getElementById("reminder");
+    // Notification button logic
+    const notifyBtn = document.getElementById('notifyBtn');
 
-    // Show notification after 5 seconds if permission granted or not needed
-    function showReminder() {
-      reminder.classList.add("show");
-    }
-
-    // Close on click
-    reminder.onclick = () => {
-      reminder.classList.remove("show");
-    };
-
-    // Try to use Notifications API (if available and permitted)
-    function notifyUser() {
+    notifyBtn.addEventListener('click', () => {
       if (!("Notification" in window)) {
-        // Notifications not supported, fallback to popup
-        setTimeout(showReminder, 5000);
+        alert("Notifications are not supported by your browser.");
         return;
       }
       if (Notification.permission === "granted") {
@@ -486,18 +429,13 @@
           if (permission === "granted") {
             new Notification("Reason Why I Love You ❤️", { body: todayReason });
           } else {
-            setTimeout(showReminder, 5000);
+            alert("Notification permission denied.");
           }
         });
       } else {
-        setTimeout(showReminder, 5000);
+        alert("Notification permission denied.");
       }
-    }
-
-    // Call the notify function on load
-    notifyUser();
-    const notifyBtn = document.getElementById("notifyBtn");
-    notifyBtn.addEventListener("click", notifyUser);
+    });
   </script>
 </body>
 </html>
