@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>365 Reasons Why I Love You 💌</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f9d5e5, #fcefee);
+      color: #333;
+      margin: 0;
+      padding: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      color: #d6336c;
+      font-size: 2.8em;
+      margin-bottom: 0.3em;
+    }
+    .reason {
+      background: #fff0f6;
+      border: 2px solid #d6336c;
+      border-radius: 15px;
+      max-width: 600px;
+      padding: 2em;
+      font-size: 1.6em;
+      box-shadow: 0 8px 16px rgba(214, 51, 108, 0.3);
+      user-select: none;
+      line-height: 1.4;
+
+      /* Animation styles */
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+    }
+    footer {
+      margin-top: 3em;
+      font-size: 0.9em;
+      color: #a83253;
+    }
+    @media (max-width: 640px) {
+      .reason {
+        font-size: 1.2em;
+        padding: 1.5em;
+        max-width: 90vw;
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Notification popup */
+    #reminder {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #d6336c;
+      color: white;
+      padding: 1em 1.5em;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.6);
+      font-size: 1em;
+      max-width: 300px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.5s, transform 0.5s;
+      user-select: none;
+      z-index: 1000;
+    }
+    #reminder.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <h1>365 Reasons Why I Love You 💌</h1>
+  <div class="reason" id="reason">Loading...</div>
+  <footer>Made with ❤️ just for you</footer>
+
+  <div id="reminder" title="Click to close">❤️ Click here to see today's reason again!</div>
+
+  <script>
+    const reasons = [
+  // 1-50
+  "You always make me laugh, even from miles away.",
+  "You listen to me and make me feel understood.",
+  "You inspire me to be a better person.",
+  "Your texts make my day brighter.",
+  "You always know how to cheer me up, even through a screen.",
+  "You have the kindest heart.",
+  "I love how you remember the little things I say.",
+  "You make me feel safe and loved, no matter the distance.",
+  "Your words are my favorite comfort.",
+  "You’re my favorite notification.",
+  "I love the way you support my dreams.",
+  "You always believe in me, even when I doubt myself.",
+  "Your honesty makes me trust you completely.",
+  "You have a beautiful mind that I adore.",
+  "Talking to you feels like home.",
+  "You make every conversation meaningful.",
+  "I love how curious you are about the world.",
+  "Your patience with me is endless.",
+  "You make me feel important every single day.",
+  "Your voice is my favorite sound.",
+  "I love how we can be silly together, even from afar.",
+  "You inspire me to see the good in everything.",
+  "Your encouragement helps me grow.",
+  "You respect my feelings and listen with an open heart.",
+  "I admire your kindness to others.",
+  "You bring out the best in me.",
+  "I love the way you dream about our future.",
+  "You make distance feel smaller and love feel bigger.",
+  "Your words linger in my heart long after we say goodbye.",
+  "You have a special way of making me smile when I’m down.",
+  "I love how you understand my silence.",
+  "You are my favorite person to share my thoughts with.",
+  "I appreciate how you care about my happiness.",
+  "Your creativity amazes me.",
+  "You make everyday moments feel special.",
+  "I love the way you tell stories.",
+  "You challenge me to think deeper.",
+  "Your loyalty means the world to me.",
+  "You make me feel seen and heard.",
+  "Your kindness makes the world better.",
+  "I love your thoughtful messages.",
+  "You make me excited for tomorrow.",
+  "You bring light to my darkest days.",
+  "I feel your love in every message you send.",
+  "Your encouragement keeps me going.",
+  "You are my calm in the storm.",
+  "I love how you celebrate my victories, big and small.",
+  "You make distance feel like a tiny detail.",
+  "Your love makes me stronger every day.",
+
+  // 51-100
+  "You have an amazing ability to make me feel special.",
+  "I love how you share your dreams with me.",
+  "You make me want to be a better partner.",
+  "Your kindness touches my soul.",
+  "I admire how thoughtful you are.",
+  "You’re my favorite person to daydream about.",
+  "You have the most beautiful soul.",
+  "I love how you always find a way to make me smile.",
+  "Your support means everything to me.",
+  "You make even ordinary days feel magical.",
+  "I love the way you make me feel valued.",
+  "You’re the first person I think about when I wake up.",
+  "You have a unique way of understanding me.",
+  "Your laughter is contagious, even through a screen.",
+  "I appreciate your gentle words.",
+  "You make my heart feel full.",
+  "I love how you respect my independence.",
+  "You always encourage me to chase my dreams.",
+  "Your messages brighten my nights.",
+  "I love how you make me feel calm and safe.",
+  "You inspire me with your passion.",
+  "You always know how to lift my spirits.",
+  "I love the way you care about my feelings.",
+  "You make me feel like I belong.",
+  "Your optimism is infectious.",
+  "I appreciate your thoughtful advice.",
+  "You’re my favorite person to talk to about anything.",
+  "I love how patient you are with me.",
+  "You always know just what to say.",
+  "Your sincerity touches my heart.",
+  "You make me excited about the future.",
+  "I love how you listen without judgment.",
+  "You make me feel appreciated every day.",
+  "Your words make my heart flutter.",
+  "I admire your resilience.",
+  "You make me feel cherished.",
+  "Your kindness inspires me.",
+  "I love the way you make me feel understood.",
+  "You always make time for me.",
+  "I appreciate your honesty.",
+  "You bring joy to my life.",
+  "You make me feel loved in so many ways.",
+  "Your presence in my life is a gift.",
+  "I love how you make me laugh when I need it most.",
+  "You’re my safe place, even from afar.",
+  "Your thoughtfulness never goes unnoticed.",
+  "I love how you make me feel like I matter.",
+
+  // 101-150
+  "You always believe in us.",
+  "I love the way you challenge me to grow.",
+  "You make me feel confident.",
+  "Your kindness is unmatched.",
+  "You inspire me to see the beauty in life.",
+  "I appreciate how you respect my boundaries.",
+  "You always support my goals.",
+  "I love how you share your thoughts with me.",
+  "You make me feel calm during chaos.",
+  "Your optimism lifts me up.",
+  "You have a way of making me feel special.",
+  "I love how we can be ourselves together.",
+  "Your encouragement means everything.",
+  "You make me want to be my best self.",
+  "I appreciate your genuine nature.",
+  "You always listen with your heart.",
+  "I love how you celebrate my successes.",
+  "You make distance seem insignificant.",
+  "Your words are my daily motivation.",
+  "I appreciate how you care for me.",
+  "You make me feel warm inside.",
+  "I love the way you share your dreams.",
+  "You’re my constant source of happiness.",
+  "You inspire me with your strength.",
+  "I appreciate your honesty and openness.",
+  "You make every conversation meaningful.",
+  "I love how you respect and cherish me.",
+  "Your support gives me courage.",
+  "You make me feel lucky every day.",
+  "I appreciate how you understand me.",
+  "You’re my favorite person to talk to.",
+  "I love your thoughtful messages.",
+  "You make my heart smile.",
+  "Your presence brightens my life.",
+  "I appreciate your unwavering support.",
+  "You make me feel safe to be myself.",
+  "I love how you make me laugh.",
+  "You inspire me with your kindness.",
+  "Your words comfort me.",
+  "You make me feel treasured.",
+  "I appreciate your patience.",
+  "You bring joy to my days.",
+  "I love how you make me feel important.",
+  "Your love is my greatest gift.",
+  "You make me excited about life.",
+  "I appreciate your care and attention.",
+  "You make me feel whole.",
+
+  // 151-200
+  "I love how you understand my dreams.",
+  "You make my worries disappear.",
+  "Your love is a beautiful melody.",
+  "You inspire me to be fearless.",
+  "I appreciate how you always listen.",
+  "You make me feel deeply loved.",
+  "Your presence is my comfort.",
+  "I love how you support my passions.",
+  "You make every moment count.",
+  "Your words heal my soul.",
+  "I appreciate your kindness every day.",
+  "You make me feel alive.",
+  "I love the way you encourage me.",
+  "You bring out the best in me.",
+  "Your love is my anchor.",
+  "I appreciate your understanding nature.",
+  "You make me feel special and unique.",
+  "I love how you share your world with me.",
+  "You inspire me to dream bigger.",
+  "Your support strengthens me.",
+  "I appreciate how you always make time.",
+  "You make me feel valued and respected.",
+  "I love how you brighten my darkest days.",
+  "You are my greatest blessing.",
+  "I appreciate your thoughtful gestures.",
+  "You make me feel comfortable to be myself.",
+  "I love your unwavering faith in us.",
+  "You inspire me to keep going.",
+  "Your words bring me peace.",
+  "I appreciate your honesty and trust.",
+  "You make me feel endlessly loved.",
+  "I love how you care for my heart.",
+  "Your love lights up my life.",
+  "You make me feel confident in us.",
+  "I appreciate your gentle spirit.",
+  "You make me smile just by being you.",
+  "I love how you always see the good in me.",
+  "You inspire me to be kind.",
+  "Your support is my strength.",
+  "I appreciate how you never give up on us.",
+  "You make me feel cherished every day.",
+  "I love the way you communicate with me.",
+  "Your love is my daily sunshine.",
+  "I appreciate your deep understanding.",
+  "You make me feel like I’m enough.",
+  "I love how you make me feel connected.",
+  "You inspire me to love fully.",
+  "Your words are my treasure.",
+  "I appreciate your endless patience.",
+
+  // 201-250
+  "You make me feel hopeful about the future.",
+  "I love how you share your thoughts so openly.",
+  "Your love comforts me in tough times.",
+  "I appreciate how you respect my feelings.",
+  "You make me feel proud of who I am.",
+  "I love the way you listen with care.",
+  "You inspire me to be courageous.",
+  "Your presence fills my heart with joy.",
+  "I appreciate your thoughtful nature.",
+  "You make me feel loved beyond words.",
+  "I love how you make me laugh every day.",
+  "You inspire me with your passion for life.",
+  "I appreciate how you always support me.",
+  "You make me feel like I matter.",
+  "I love your kind and caring heart.",
+  "You inspire me to see the beauty in small things.",
+  "I appreciate how you never judge me.",
+  "You make me feel safe and protected.",
+  "I love how you share your dreams and hopes.",
+  "You inspire me to be better every day.",
+  "I appreciate your constant encouragement.",
+  "You make me feel understood and accepted.",
+  "I love how you make me feel special even from afar.",
+  "You inspire me to love more deeply.",
+  "I appreciate your endless love and care.",
+  "You make my heart race with happiness.",
+  "I love how you are always there for me.",
+  "You inspire me to chase my dreams.",
+  "I appreciate your honesty and loyalty.",
+  "You make me feel beautiful inside and out.",
+  "I love how you make distance feel insignificant.",
+  "You inspire me to be patient and kind.",
+  "I appreciate your gentle words and actions.",
+  "You make me feel grateful every day.",
+  "I love the way you brighten my day with your voice.",
+  "You inspire me to stay hopeful.",
+  "I appreciate how you share your life with me.",
+  "You make me feel deeply connected to you.",
+  "I love how you support my growth.",
+  "You inspire me to be brave.",
+  "I appreciate your love that knows no distance.",
+  "You make me feel confident in our love.",
+  "I love how you always make me smile.",
+  "You inspire me to keep believing in us.",
+  "I appreciate your caring and thoughtful heart.",
+  "You make me feel like the luckiest person alive.",
+  "I love how you are my constant support.",
+  "You inspire me to love without limits.",
+  "I appreciate how you always make time for me.",
+
+  // 251-300
+  "You make me feel like I’m your world.",
+  "I love how you make every day brighter.",
+  "You inspire me to be more understanding.",
+  "I appreciate your loving and patient nature.",
+  "You make me feel treasured and adored.",
+  "I love how you make our love so special.",
+  "You inspire me to be kinder and gentler.",
+  "I appreciate how you accept me completely.",
+  "You make me feel safe in your love.",
+  "I love how you dream about our future together.",
+  "You inspire me to keep growing.",
+  "I appreciate your constant encouragement and support.",
+  "You make me feel like I belong with you.",
+  "I love how you make me feel beautiful inside.",
+  "You inspire me to stay strong.",
+  "I appreciate your honest and open heart.",
+  "You make me feel calm and peaceful.",
+  "I love how you always understand my feelings.",
+  "You inspire me to be patient with myself.",
+  "I appreciate how you listen with your whole heart.",
+  "You make me feel endlessly loved and cared for.",
+  "I love how you share your hopes and dreams.",
+  "You inspire me to keep believing in us.",
+  "I appreciate your unwavering loyalty.",
+  "You make me feel like my happiness matters.",
+  "I love how you make me feel special every day.",
+  "You inspire me to be my best self.",
+  "I appreciate your kindness and compassion.",
+  "You make me feel like the most important person.",
+  "I love how you always make me laugh.",
+  "You inspire me to face challenges bravely.",
+  "I appreciate your thoughtful and caring ways.",
+  "You make me feel connected to you no matter the miles.",
+  "I love how you encourage me to chase my dreams.",
+  "You inspire me to love deeply and freely.",
+  "I appreciate your honesty and integrity.",
+  "You make me feel safe to be vulnerable.",
+  "I love how you respect and cherish our love.",
+  "You inspire me to keep hope alive.",
+  "I appreciate your gentle and loving nature.",
+  "You make me feel like we are inseparable.",
+  "I love how you brighten even the darkest days.",
+  "You inspire me to be better every day.",
+  "I appreciate your patience and understanding.",
+  "You make me feel like I am enough.",
+  "I love how you always make time for us.",
+  "You inspire me to keep dreaming with you.",
+  "I appreciate your love that transcends distance.",
+  "You make me feel like the luckiest person in the world.",
+
+  // 301-350
+  "I love how you support my passions from afar.",
+  "You inspire me to be more loving and kind.",
+  "I appreciate your gentle words that heal.",
+  "You make me feel treasured beyond measure.",
+  "I love how you make me laugh when I need it most.",
+  "You inspire me to see the beauty in every moment.",
+  "I appreciate your unwavering belief in us.",
+  "You make me feel calm even on the hardest days.",
+  "I love how you always encourage me to keep going.",
+  "You inspire me to trust in our love.",
+  "I appreciate how you share your heart with me.",
+  "You make me feel safe to be myself.",
+  "I love how you make distance feel like nothing.",
+  "You inspire me to cherish every message we share.",
+  "I appreciate your kindness that knows no bounds.",
+  "You make me feel like my feelings matter.",
+  "I love how you always see the best in me.",
+  "You inspire me to keep the faith.",
+  "I appreciate your thoughtful and caring heart.",
+  "You make me feel loved through every word.",
+  "I love how you make me smile with your texts.",
+  "You inspire me to be patient and understanding.",
+  "I appreciate your honest and loving nature.",
+  "You make me feel deeply connected to you.",
+  "I love how you brighten my days with your presence.",
+  "You inspire me to be more open-hearted.",
+  "I appreciate your constant love and support.",
+  "You make me feel cherished every single day.",
+  "I love how you listen and truly hear me.",
+  "You inspire me to keep growing with you.",
+  "I appreciate your faith in us and our future.",
+  "You make me feel like the most special person.",
+  "I love how you always make time for us.",
+  "You inspire me to love without limits.",
+  "I appreciate your kindness that warms my heart.",
+  "You make me feel like we are meant to be.",
+  "I love how you share your dreams and hopes with me.",
+  "You inspire me to stay hopeful and strong.",
+  "I appreciate your gentle and patient ways.",
+  "You make me feel like I belong with you.",
+  "I love how you encourage me to be my best.",
+  "You inspire me to cherish every moment we have.",
+  "I appreciate your love that crosses any distance.",
+  "You make me feel lucky to have you.",
+  "I love how you make every day brighter for me.",
+  "You inspire me to keep believing in love.",
+  "I appreciate your thoughtful messages that heal.",
+  "You make me feel loved no matter the miles.",
+  "I love how you always make me feel special.",
+  "You inspire me to keep dreaming of our future.",
+  "I appreciate your honesty and care every day."
+];
+
+    // Calculate index based on days since Jan 1, 2025
+    const startDate = new Date("2025-01-01T00:00:00Z");
+    const today = new Date();
+
+    const diffMs = today - startDate;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const index = diffDays % reasons.length;
+    const todayReason = reasons[index];
+
+    const reasonEl = document.getElementById("reason");
+    reasonEl.textContent = todayReason;
+
+    // Notification reminder popup
+    const reminder = document.getElementById("reminder");
+
+    // Show notification after 5 seconds if permission granted or not needed
+    function showReminder() {
+      reminder.classList.add("show");
+    }
+
+    // Close on click
+    reminder.onclick = () => {
+      reminder.classList.remove("show");
+    };
+
+    // Try to use Notifications API (if available and permitted)
+    function notifyUser() {
+      if (!("Notification" in window)) {
+        // Notifications not supported, fallback to popup
+        setTimeout(showReminder, 5000);
+        return;
+      }
+      if (Notification.permission === "granted") {
+        new Notification("Reason Why I Love You ❤️", { body: todayReason });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("Reason Why I Love You ❤️", { body: todayReason });
+          } else {
+            setTimeout(showReminder, 5000);
+          }
+        });
+      } else {
+        setTimeout(showReminder, 5000);
+      }
+    }
+
+    // Call the notify function on load
+    notifyUser();
+  </script>
+</body>
+</html>
